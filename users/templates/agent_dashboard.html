@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative; /* To position buttons relative to the body */
+        }
+
+        .container {
+            width: 80%;
+            max-width: 900px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 0;
+        }
+
+        h2 {
+            color: #4CAF50;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 10px 0;
+        }
+
+        strong {
+            color: #4CAF50;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+
+        /* Position the Logout button at the top-left corner */
+        .logout-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+        }
+
+        
+    </style>
+</head>
+<body>
+
+    <!-- Logout button placed at the top-left corner -->
+    <form method="POST" action="{% url 'login' %}" class="logout-button">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+
+    <!-- Back button placed at the top-right corner -->
+    
+
+    <div class="container">
+        <h1>Agent Dashboard</h1>
+        <div>
+            <h2>Vehicle and Agent Information</h2>
+            <p><strong>Agent ID:</strong> {{ agent_data.agent_id }}</p>
+            <p><strong>Age:</strong> {{ agent_data.age }}</p>
+            <p><strong>Gender:</strong> {{ agent_data.gender }}</p>
+            <p><strong>Vehicle Type:</strong> {{ agent_data.v_type }}</p>
+            <p><strong>Vehicle Color:</strong> {{ agent_data.v_color }}</p>
+            <p><strong>License Number:</strong> {{ agent_data.license_number }}</p>
+            <p><strong>Vehicle Number:</strong> {{ agent_data.vehicle_number }}</p>
+            <p><strong>Year of Joining:</strong> {{ agent_data.year_of_joining }}</p>
+            <p><strong>Vehicle Registration Number:</strong> {{ agent_data.vehicle_registration_number }}</p>
+        </div>
+        <form method="POST" action="{% url 'update_vehicle_data' %}" id="updateForm" style="display: none;">
+            {% csrf_token %}    
+            <input type="hidden" name="agent_id" value="{{ agent_data.agent_id }}">
+            <input type="hidden" name="vehicle_number" value="{{ agent_data.vehicle_number }}">
+            <input type="text" name="v_type" value="{{ agent_data.v_type }}" placeholder="Vehicle Type">
+            <input type="text" name="v_color" value="{{ agent_data.v_color }}" placeholder="Vehicle Color">
+            <input type="text" name="license_number" value="{{ agent_data.license_number }}" placeholder="License Number">
+            <input type="text" name="vehicle_registration_number" value="{{ agent_data.vehicle_registration_number }}" placeholder="Vehicle Registration Number">
+            <button type="submit">Update Vehicle Details</button>
+        </form> 
+        <div class="button-container">
+            <button type="button" id="toggleUpdateForm">Update Vehicle Details</button>
+            <button onclick="window.location.href='{% url 'agent_specifice_orders' %}'">View Order Details</button>
+        </div>
+    </div>
+
+    <script>
+        // Get the button and form elements
+        const toggleButton = document.getElementById('toggleUpdateForm');
+        const updateForm = document.getElementById('updateForm');
+    
+        // Add click event to toggle the visibility of the form
+        toggleButton.addEventListener('click', function() {
+            if (updateForm.style.display === 'none') {
+                updateForm.style.display = 'block';
+                toggleButton.innerText = 'Cancel Update'; // Change button text to "Cancel Update"
+            } else {
+                updateForm.style.display = 'none';
+                toggleButton.innerText = 'Update Vehicle Details'; // Reset button text
+            }
+        });
+    </script>
+</body>
+</html>

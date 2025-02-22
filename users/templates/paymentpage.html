@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <script>
+      
+        function submitPayment() {
+            const paymentId = generatePaymentId();
+            const customerId = '{{ customer_id }}';
+            const paymentDescription = document.getElementById('payment-description').value;
+            const paymentMethod = document.getElementById('payment-method').value;
+
+            const paymentDetails = {
+                paymentId: paymentId,
+                customerId: customerId,
+                paymentDescription: paymentDescription,
+                paymentMethod: paymentMethod
+            };
+
+            
+            processPayment(paymentDetails);
+        }
+
+        function generatePaymentId() {  
+            return 'PAY' + Math.floor(Math.random() * 1000000);
+        }
+
+        function processPayment(paymentDetails) {
+            const orderDetails = JSON.parse(localStorage.getItem('orderDetails'));
+            console.log("Order Details: ", orderDetails);
+            console.log("Payment Details: ", paymentDetails);
+            alert("Payment processed successfully!");
+            window.location.href = '/payment-confirmation';  
+        }
+    </script>
+</head>
+<body>
+    <h1>Payment Information</h1>
+    
+    <form onsubmit="event.preventDefault(); submitPayment();">
+        <label for="payment-description">Payment Description:</label><br>
+        <input type="text" id="payment-description" required><br><br>
+
+        <label for="payment-method">Payment Method:</label><br>
+        <select id="payment-method" required>
+            <option value="credit_card">Credit Card</option>
+            <option value="paypal">PayPal</option>
+            <option value="cash">Cash</option>
+        </select><br><br>
+
+        <button type="submit">Submit Payment</button>
+    </form>
+</body>
+</html>

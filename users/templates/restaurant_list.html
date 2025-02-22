@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurants for Category: {{ category }}</title>
+    <style>
+        /* Reset margin and padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Styling for the category title */
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Styling for the list of restaurants */
+        ul {
+            list-style: none;
+            width: 100%;
+            max-width: 800px; /* To prevent it from being too wide */
+            padding: 0;
+        }
+
+        /* Each restaurant list item styling */
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styling for the "See Menu" button */
+        a button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        a button:hover {
+            background-color: #45a049;
+        }
+
+        /* Go Back button styling at the top left */
+        .go-back-btn {
+            align-self: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .go-back-btn button {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .go-back-btn button:hover {
+            background-color: #e53935;
+        }
+
+        /* Styling for the "No restaurants found" message */
+        p {
+            font-size: 18px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <!-- Go Back Button -->
+    <div class="go-back-btn">
+        <a href="{% url 'customer_dashboard' %}">
+            <button>Go Back</button>
+        </a>
+    </div>
+
+    <h1>Restaurants for Category: {{ category }}</h1>
+
+    {% if restaurants %}
+        <ul>
+            {% for restaurant in restaurants %}
+                <li>
+                    <!-- Restaurant Name on the left -->
+                    <span>{{ restaurant.restaurant_name }}</span>
+                    <!-- See Menu Button on the right -->
+                    <a href="{% url 'restaurant_menu' restaurant_id=restaurant.restaurant_id category_name=category %}">
+                        <button>See Menu</button>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No restaurants found for this category.</p>
+    {% endif %}
+</body>
+</html>

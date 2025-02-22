@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Order Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <script>
+        function handleButtonClick(orderId, deliveryId) {
+            // Send a POST request to the same function with the selected order ID and delivery ID
+            fetch('', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}' // Use Django's CSRF token for security
+                },
+                body: JSON.stringify({ 
+                    order_id: orderId,
+                    delivery_id: deliveryId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Action performed successfully for Order ID: ' + orderId);
+                location.reload(); // Reload the page to reflect changes
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Agent Orders Dashboard</h2>
+
+        {% if order_data %}
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Restaurant Name</th>
+                    <th>Delivery Status</th>
+                    <th>Order Details</th>
+                    <th>Delivery ID</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in order_data %}
+                <tr>
+                    <td>{{ order.order_id }}</td>
+                    <td>{{ order.restaurant_name }}</td>
+                    <td>{{ order.delivery_status }}</td>
+                    <td>{{ order.delivery_id }}</td>
+                    <td>
+                        <ul>
+                            {% for item in order.order_details %}
+                            <li>
+                                {{ item.quantity }}x {{ item.item_name }} @ {{ item.price }} each
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>
+                        {% if order.delivery_status != 'successful' %}
+                            <button 
+                                class="btn btn-primary" 
+                                onclick="handleButtonClick('{{ order.order_id }}', '{{ order.delivery_id }}')">
+                                Mark as Delivered
+                            </button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No orders available.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
